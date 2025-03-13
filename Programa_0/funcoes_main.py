@@ -23,7 +23,8 @@ class FormatacaoTexto:
                 formatado.append([l])
             return formatado[n[0]:n[1]]
 
-    def formatacao(self, text: str, title: str=''):
+    @staticmethod
+    def formatacao(text: str, title: str=''):
         if text in '\n':
             lows = text.splitlines()
             print(f'\033[32;1m{title:^{len(lows[0])}}\033[m')
@@ -82,7 +83,22 @@ class GerenciamentoArquivo:
                     if text.strip().lower() in l.strip().lower():
                         lista_psc.append([l, f'{conteudo.index(l, index)+1}° Linha'])
                         index = conteudo.index(l, index)
-                FormatacaoTexto.formatacao(*lista_psc, title='Resultados da Pesquisa:', subtitles=('Informação', 'Linha'))
+                FormatacaoTexto.tabela(*lista_psc, title='Resultados da Pesquisa:', subtitles=('Informação', 'Linha'))
                 return lista_psc
+
+class Inputs:
+    def __init__(self, text: str):
+        self.text = text
+
+    def str(self):
+        npt = str(input(self.text))
+        return npt
+
+    def int(self):
+        pass
+
+    def protecao(self, npt, loop: bool=False):
+        pass
+
 
 

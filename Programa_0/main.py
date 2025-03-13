@@ -1,5 +1,5 @@
 import os
-from Programa_0.funcoes_main import VerificacaoPasta, FormatacaoTexto, GerenciamentoArquivo
+from Programa_0.funcoes_main import VerificacaoPasta, FormatacaoTexto, GerenciamentoArquivo, Inputs
 
 
 class GerenciamentoFormulas:
@@ -17,7 +17,7 @@ class GerenciamentoFormulas:
     def dlt(self, low: int):
         with open(os.path.join(self.path, self.file), 'r+') as arq:
             conteudo = arq.readlines()
-            print(f'\033[31m{FormatacaoTexto(self.path, self.file).formatacao(text=conteudo[low-1], title='Conteúdo apagado:')}\033[m')
+            print(f'\033[31m{FormatacaoTexto(self.path, self.file).formatacao(text=conteudo[low-1], title='Conteúdo apagado:')}')
             del conteudo[low-1]
             arq.seek(0)
             arq.truncate()
@@ -30,4 +30,4 @@ class GerenciamentoFormulas:
 
 if __name__ == '__main__':
     meuger = GerenciamentoFormulas()
-    meuger.dlt(8)
+    GerenciamentoArquivo(os.path.join(os.getcwd(), 'armazenamento-formulas')).psc(Inputs.protecao(Inputs('Digite o texto que deseja pesquisar: ').str()))
