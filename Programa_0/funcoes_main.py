@@ -23,8 +23,16 @@ class FormatacaoTexto:
                 formatado.append([l])
             return formatado[n[0]:n[1]]
 
+    def formatacao(self, text: str, title: str=''):
+        if text in '\n':
+            lows = text.splitlines()
+            print(f'\033[32;1m{title:^{len(lows[0])}}\033[m')
+        else:
+            print(f'\033[32;1m{title:^{len(text)}}\033[m')
+        return text
+
     @staticmethod
-    def formatacao(*args_colums, title: str='', subtitles: tuple=()):
+    def tabela(*args_colums, title: str='', subtitles: tuple=()):
         m = 0
         n_colums = 0
         for args in args_colums:
@@ -59,6 +67,7 @@ class GerenciamentoArquivo:
             for a in listdir(self.path):
                 if a.endswith('.txt'):
                     return a
+        return self.file
 
     def psc(self, text: str='*every*'):
         file = GerenciamentoArquivo(self.path, self.file).get_arq_initial()
@@ -74,4 +83,6 @@ class GerenciamentoArquivo:
                         lista_psc.append([l, f'{conteudo.index(l, index)+1}° Linha'])
                         index = conteudo.index(l, index)
                 FormatacaoTexto.formatacao(*lista_psc, title='Resultados da Pesquisa:', subtitles=('Informação', 'Linha'))
+                return lista_psc
+
 

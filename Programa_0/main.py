@@ -3,21 +3,26 @@ from Programa_0.funcoes_main import VerificacaoPasta, FormatacaoTexto, Gerenciam
 
 
 class GerenciamentoFormulas:
-    def __init__(self):
-        pass
+    def __init__(self, path: str=os.path.join(os.getcwd(), 'armazenamento-formulas'), file: str=None):
+        self.path = path
+        self.file = GerenciamentoArquivo(self.path, file).get_arq_initial()
 
-    @classmethod
-    def add(cls, text: str, path: str=os.path.join(os.getcwd(), 'armazenamento-formulas'), file: str=None):
-        VerificacaoPasta(path)
-        file = GerenciamentoArquivo(path, file).get_arq_initial()
-        with open(os.path.join(path, file), 'a+') as arq:
+    def add(self, text: str):
+        VerificacaoPasta(self.path)
+        with open(os.path.join(self.path, self.file), 'a+') as arq:
             arq.write(text+'\n')
             arq.seek(0)
-        FormatacaoTexto.formatacao(*FormatacaoTexto(path, file).show((-4, None)), title='Adicionado neste arquivo')
+        FormatacaoTexto.tabela(*FormatacaoTexto(self.path, self.file).show((-4, None)), title='Adicionado neste arquivo')
 
-    @classmethod
-    def dlt(cls, text: str, path: str=os.path.join(os.getcwd(), 'armazenamento-formulas'), file: str=None):
-        GerenciamentoArquivo(path, file).psc(text)
+    def dlt(self, low: int):
+        with open(os.path.join(self.path, self.file), 'r+') as arq:
+            conteudo = arq.readlines()
+            print(f'\033[31m{FormatacaoTexto(self.path, self.file).formatacao(text=conteudo[low-1], title='Conteúdo apagado:')}\033[m')
+            del conteudo[low-1]
+            arq.seek(0)
+            arq.truncate()
+            arq.writelines(conteudo)
+
 
     def show(self):
         pass
@@ -25,4 +30,4 @@ class GerenciamentoFormulas:
 
 if __name__ == '__main__':
     meuger = GerenciamentoFormulas()
-    meuger.dlt('a')
+    meuger.dlt(8)

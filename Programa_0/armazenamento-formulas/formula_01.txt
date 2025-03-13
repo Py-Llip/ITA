@@ -1,5 +1,3 @@
-ac
-bac
 ca
 d
 ea
@@ -7,8 +5,3 @@ f
 g
 ha
 i
-jaaaaa
-ka
-l
-ma
-n
