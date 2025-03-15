@@ -1,12 +1,14 @@
 import os
+from abc import ABC, abstractmethod
 from Programa_0.funcoes_main import VerificacaoPasta, FormatacaoTexto, GerenciamentoArquivo, Inputs
 
 
-class GerenciamentoFormulas:
+class Interface(ABC):
     def __init__(self, path: str=os.path.join(os.getcwd(), 'armazenamento-formulas'), file: str=None):
         self.path = path
         self.file = GerenciamentoArquivo(self.path, file).get_arq_initial()
 
+class ManipulacaoFormulas(Interface):
     def add(self, text: str):
         VerificacaoPasta(self.path)
         with open(os.path.join(self.path, self.file), 'a+', encoding='utf-8') as arq:
@@ -28,8 +30,30 @@ class GerenciamentoFormulas:
         arq = fortext.show(n)
         for _ in range(len(arq)):
             arq[_].append(_+1+n[0])
-        fortext.tabela(*arq, title='ARQUIVO', subtitles=('Conteúdos', 'Linhas°'))
+        fortext.tabela(*arq, title=f'ARQUIVO: {self.file}', subtitles=('Conteúdos', 'Linhas°'))
+
+class GerenciamentoFormulas(Interface):
+    lis_randint = []
+    def random(self):
+        from random import randint
+        with open(os.path.join(self.path, self.file), 'r', encoding='utf-8') as arq:
+            t = len(arq.readlines())-1
+        while not len(GerenciamentoFormulas.lis_randint)-1 >= t:
+            a = randint(0, t)
+            if a not in GerenciamentoFormulas.lis_randint:
+                GerenciamentoFormulas.lis_randint.append(a)
+
+        
+
+
+
+
+
+    def sequence(self):
+        pass
+
 
 if __name__ == '__main__':
     meuger = GerenciamentoFormulas()
-    meuger.show((5, None))
+    meuger.random()
+

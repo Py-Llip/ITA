@@ -6,6 +6,7 @@ class VerificacaoPasta:
     def __init__(self, path: str=getcwd()):
         self.path = path
         self.criar_pastas()
+
     def criar_pastas(self):
         caminho = join(self.path, 'formulas-temporarias')
         if not exists(caminho):
@@ -37,7 +38,6 @@ class FormatacaoTexto:
     def tabela(*args_colums, title: str='', subtitles: tuple=()):
         m = 0
         n_colums = 0
-        print(args_colums)
         for args in args_colums:
             if args_colums.index(args) == 0:
                 n_colums  = len(args)
