@@ -1,3 +1,4 @@
+from logging import raiseExceptions
 from os import makedirs, getcwd, listdir
 from os.path import join, exists
 
@@ -90,15 +91,31 @@ class Inputs:
     def __init__(self, text: str):
         self.text = text
 
+    @staticmethod
+    def protegido(func):
+        def wrapper(self, *args, **kwargs):
+            while True:
+                try:
+                    resultado = func(self, *args, **kwargs)
+                except Exception:
+                    print('\033[31;1mErro!\033[m')
+                else:
+                    break
+            return resultado
+        return wrapper
+
+    @protegido
     def str(self):
-        npt = str(input(self.text))
-        return npt
+        return str(input(self.text))
 
+    @protegido
     def int(self):
-        pass
+        return int(input(self.text))
 
-    def protecao(self, npt, loop: bool=False):
-        pass
+if __name__ == '__main__':
+    resp = Inputs('Coloque: ').int()
+    print(resp)
+
 
 
 

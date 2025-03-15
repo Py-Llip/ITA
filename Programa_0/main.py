@@ -23,11 +23,11 @@ class GerenciamentoFormulas:
             arq.truncate()
             arq.writelines(conteudo)
 
-
     def show(self):
         pass
 
 
 if __name__ == '__main__':
     meuger = GerenciamentoFormulas()
-    GerenciamentoArquivo(os.path.join(os.getcwd(), 'armazenamento-formulas')).psc(Inputs.protecao(Inputs('Digite o texto que deseja pesquisar: ').str()))
+    npt = Inputs('Digite a frase que deseja pesquisar: ')
+    GerenciamentoArquivo(os.path.join(os.getcwd(), 'armazenamento-formulas')).psc(npt.str())
