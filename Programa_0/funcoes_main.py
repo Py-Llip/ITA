@@ -17,7 +17,7 @@ class FormatacaoTexto:
         self.file = file
 
     def show(self, n: tuple=(0, None)):
-        with open(join(self.path, self.file), 'r') as arq:
+        with open(join(self.path, self.file), 'r', encoding='utf-8') as arq:
             conteudo = arq.readlines()
             formatado = []
             for l in conteudo:
@@ -37,6 +37,7 @@ class FormatacaoTexto:
     def tabela(*args_colums, title: str='', subtitles: tuple=()):
         m = 0
         n_colums = 0
+        print(args_colums)
         for args in args_colums:
             if args_colums.index(args) == 0:
                 n_colums  = len(args)
@@ -48,6 +49,10 @@ class FormatacaoTexto:
                 elif len(str(arg)) > m:
                     m = len(str(arg))
 
+        for s in subtitles:
+            if len(str(s)) > m:
+                m = len(s)
+
         print(f'\033[97;1m{title:^{round(n_colums * m + 5 * n_colums)}}\033[m\n')
         for args in args_colums:
             for arg in args:
@@ -56,7 +61,7 @@ class FormatacaoTexto:
                         for e, s in enumerate(args):
                             print(f'\033[32;1m{subtitles[args.index(arg)+e]:^{m + 5}}\033[m', end='' if e < len(subtitles)-1 else None)
                         print()
-                print(f'{"\033[37m" if args_colums.index(args) % 2 != 0 else ""}{"| " if args.index(arg) == 0 else ""} {arg.strip():^{m}} | \033[m', end='')
+                print(f'{"\033[37m" if args_colums.index(args) % 2 != 0 else ""}{"| " if args.index(arg) == 0 else ""} {str(arg).strip():^{m}} | \033[m', end='')
             print()
 
 class GerenciamentoArquivo:
@@ -71,19 +76,16 @@ class GerenciamentoArquivo:
                     return a
         return self.file
 
-    def psc(self, text: str='*every*'):
+    def psc(self, text: str=''):
         file = GerenciamentoArquivo(self.path, self.file).get_arq_initial()
-        with open(join(self.path, file), 'r+') as arq:
-            if text == '*every*':
-                print(arq.read())
-            else:
-                conteudo = arq.readlines()
-                lista_psc = []
-                index = 0
-                for l in conteudo:
-                    if text.strip().lower() in l.strip().lower():
-                        lista_psc.append([l, f'{conteudo.index(l, index)+1}° Linha'])
-                        index = conteudo.index(l, index)
+        with open(join(self.path, file), 'r+', encoding='utf-8') as arq:
+            conteudo = arq.readlines()
+            lista_psc = []
+            index = 0
+            for l in conteudo:
+                if text.strip().lower() in l.strip().lower():
+                    lista_psc.append([l, f'{conteudo.index(l, index)+1}° Linha'])
+                    index = conteudo.index(l, index)
                 FormatacaoTexto.tabela(*lista_psc, title='Resultados da Pesquisa:', subtitles=('Informação', 'Linha'))
                 return lista_psc
 

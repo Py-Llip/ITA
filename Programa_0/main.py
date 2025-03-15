@@ -9,13 +9,13 @@ class GerenciamentoFormulas:
 
     def add(self, text: str):
         VerificacaoPasta(self.path)
-        with open(os.path.join(self.path, self.file), 'a+') as arq:
+        with open(os.path.join(self.path, self.file), 'a+', encoding='utf-8') as arq:
             arq.write(text+'\n')
             arq.seek(0)
         FormatacaoTexto.tabela(*FormatacaoTexto(self.path, self.file).show((-4, None)), title='Adicionado neste arquivo')
 
     def dlt(self, low: int):
-        with open(os.path.join(self.path, self.file), 'r+') as arq:
+        with open(os.path.join(self.path, self.file), 'r+', encoding='utf-8') as arq:
             conteudo = arq.readlines()
             print(f'\033[31m{FormatacaoTexto(self.path, self.file).formatacao(text=conteudo[low-1], title='Conteúdo apagado:')}')
             del conteudo[low-1]
@@ -23,11 +23,13 @@ class GerenciamentoFormulas:
             arq.truncate()
             arq.writelines(conteudo)
 
-    def show(self):
-        pass
-
+    def show(self, n: tuple=(0, None)):
+        fortext = FormatacaoTexto(self.path, self.file)
+        arq = fortext.show(n)
+        for _ in range(len(arq)):
+            arq[_].append(_+1+n[0])
+        fortext.tabela(*arq, title='ARQUIVO', subtitles=('Conteúdos', 'Linhas°'))
 
 if __name__ == '__main__':
     meuger = GerenciamentoFormulas()
-    npt = Inputs('Digite a frase que deseja pesquisar: ')
-    GerenciamentoArquivo(os.path.join(os.getcwd(), 'armazenamento-formulas')).psc(npt.str())
+    meuger.show((5, None))
