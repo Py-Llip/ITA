@@ -5,12 +5,13 @@ from os.path import join, exists
 class VerificacaoPasta:
     def __init__(self, path: str=getcwd()):
         self.path = path
-        self.criar_pastas()
 
-    def criar_pastas(self):
-        caminho = join(self.path, 'formulas-temporarias')
-        if not exists(caminho):
-            makedirs(caminho)
+    def criar_pastas(self, pasts: tuple=('formulas', 'argumentos', 'formulas-temporarias')):
+        for n in pasts:
+            caminho = join(self.path, str(n))
+            if not exists(caminho):
+                makedirs(caminho)
+        return self.path
 
 class FormatacaoTexto:
     def __init__(self, path: str, file: str=None):
@@ -69,16 +70,15 @@ class GerenciamentoArquivo:
         self.path = path
         self.file = file
 
-    def get_arq_initial(self):
+    def get_arq_initial(self, path: str=''):
         if self.file is None:
-            for a in listdir(self.path):
+            for a in listdir(join(self.path, path)):
                 if a.endswith('.txt'):
-                    return a
-        return self.file
+                    return join(path, a)
+        return join(path, self.file)
 
     def psc(self, text: str=''):
-        file = GerenciamentoArquivo(self.path, self.file).get_arq_initial()
-        with open(join(self.path, file), 'r+', encoding='utf-8') as arq:
+        with open(join(self.path, self.file), 'r+', encoding='utf-8') as arq:
             conteudo = arq.readlines()
             lista_psc = []
             index = 0
@@ -88,6 +88,21 @@ class GerenciamentoArquivo:
                     index = conteudo.index(l, index)
                 FormatacaoTexto.tabela(*lista_psc, title='Resultados da Pesquisa:', subtitles=('Informação', 'Linha'))
                 return lista_psc
+
+    def file_liker(self, file2: str):
+        for n in [self.file, file2]:
+            with open(join(self.path, n), 'r', encoding='utf-8') as arq:
+                if n == self.file:
+                    formula = arq.readlines()
+                else:
+                    enunciado = arq.readlines()
+                    for i in range(len(enunciado)):
+                        try:
+                            enunciado[i] = [enunciado[i]]
+                            enunciado[i].append(formula[i])
+                        except IndexError:
+                            break
+        return enunciado
 
 class Inputs:
     def __init__(self, text: str):
@@ -115,8 +130,8 @@ class Inputs:
         return int(input(self.text))
 
 if __name__ == '__main__':
-    resp = Inputs('Coloque: ').int()
-    print(resp)
+    g = GerenciamentoArquivo(join(getcwd(), 'armazenamento-formulas'), join('formulas', 'formula_01.txt'))
+    g.file_liker(join('argumentos', 'argumento_01.txt'))
 
 
 
