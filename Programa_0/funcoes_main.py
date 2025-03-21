@@ -90,6 +90,7 @@ class GerenciamentoArquivo:
                 return lista_psc
 
     def file_liker(self, file2: str):
+        dic = {}
         for n in [self.file, file2]:
             with open(join(self.path, n), 'r', encoding='utf-8') as arq:
                 if n == self.file:
@@ -98,14 +99,13 @@ class GerenciamentoArquivo:
                     enunciado = arq.readlines()
                     for i in range(len(enunciado)):
                         try:
-                            enunciado[i] = [enunciado[i]]
-                            enunciado[i].append(formula[i])
+                            dic[enunciado[i]] = formula[i]
                         except IndexError:
                             break
-        return enunciado
+        return dic
 
 class Inputs:
-    def __init__(self, text: str):
+    def __init__(self, text: str=''):
         self.text = text
 
     @staticmethod
@@ -128,6 +128,27 @@ class Inputs:
     @protegido
     def int(self):
         return int(input(self.text))
+
+    @protegido
+    def question(self, question:str=None, answer: str=None, **full):
+        question = list(full.keys())[0] if question is None else question
+        answer = list(full.values())[0] if answer is None else answer
+        print(self.text)
+        a = str(input(question))
+        if a.strip().lower() in answer.strip().lower():
+            if a.strip().lower() == answer.strip().lower():
+                print(f'Você acertou! dada: {a} = certa: {answer}')
+                return True
+            else:
+                print(f'Você quase acertou. dada: {a} <-- quase isso')
+                return None
+        else:
+            print('\033[31;1mResposta errada!\033[m')
+            return False
+
+
+
+
 
 if __name__ == '__main__':
     g = GerenciamentoArquivo(join(getcwd(), 'armazenamento-formulas'), join('formulas', 'formula_01.txt'))

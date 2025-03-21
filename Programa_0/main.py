@@ -32,26 +32,26 @@ class ManipulacaoFormulas(Interface):
         fortext.tabela(*arq, title=f'ARQUIVO: {self.file}', subtitles=('Conteúdos', 'Linhas°'))
 
 class GerenciamentoFormulas(Interface):
-    lis_liker = []
+    lis_liker = {}
     def __init__(self, question_file: str=None, path: str=os.path.join(os.getcwd(), 'armazenamento-formulas'), file: str=None):
         super().__init__(path, file)
         self.question_file = GerenciamentoArquivo(path, question_file).get_arq_initial('argumentos')
     def random(self):
         from random import choice
+        dic_i = {}
         if not GerenciamentoFormulas.lis_liker:
             GerenciamentoFormulas.lis_liker = GerenciamentoArquivo(self.path, self.file).file_liker(os.path.join(self.path, self.question_file))
-        e = choice(GerenciamentoFormulas.lis_liker)
-        GerenciamentoFormulas.lis_liker.remove(e)
-        return e
-
-
-
+            GerenciamentoFormulas.lis_liker = list(GerenciamentoFormulas.lis_liker.items())
+        i = GerenciamentoFormulas.lis_liker.pop(GerenciamentoFormulas.lis_liker.index(choice(GerenciamentoFormulas.lis_liker)))
+        dic_i[i[0]] = i[1]
+        return dic_i
 
     def sequence(self):
         pass
 
 if __name__ == '__main__':
     meuger = GerenciamentoFormulas()
-    print(meuger.random(), meuger.random())
+    r = meuger.random
+    Inputs().question(**r())
 
 
