@@ -105,7 +105,7 @@ class GerenciamentoArquivo:
         return dic
 
 class Inputs:
-    def __init__(self, text: str=''):
+    def __init__(self, text: str=None):
         self.text = text
 
     @staticmethod
@@ -133,14 +133,14 @@ class Inputs:
     def question(self, question:str=None, answer: str=None, **full):
         question = list(full.keys())[0] if question is None else question
         answer = list(full.values())[0] if answer is None else answer
-        print(self.text)
+        print(self.text) if self.text is not None else None
         a = str(input(question))
         if a.strip().lower() in answer.strip().lower():
             if a.strip().lower() == answer.strip().lower():
-                print(f'Você acertou! dada: {a} = certa: {answer}')
+                print(f'\033[32;1mVocê acertou! dada: {a} = certa: {answer}\033[m')
                 return True
             else:
-                print(f'Você quase acertou. dada: {a} <-- quase isso')
+                print(f'\033[33;1mVocê quase acertou. dada: {a} <-- quase isso\033[m')
                 return None
         else:
             print('\033[31;1mResposta errada!\033[m')

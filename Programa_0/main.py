@@ -33,25 +33,31 @@ class ManipulacaoFormulas(Interface):
 
 class GerenciamentoFormulas(Interface):
     lis_liker = {}
+    sequence_index = -1
     def __init__(self, question_file: str=None, path: str=os.path.join(os.getcwd(), 'armazenamento-formulas'), file: str=None):
         super().__init__(path, file)
         self.question_file = GerenciamentoArquivo(path, question_file).get_arq_initial('argumentos')
+        self.liker = GerenciamentoArquivo(self.path, self.file).file_liker(self.question_file)
+
     def random(self):
         from random import choice
         dic_i = {}
         if not GerenciamentoFormulas.lis_liker:
-            GerenciamentoFormulas.lis_liker = GerenciamentoArquivo(self.path, self.file).file_liker(os.path.join(self.path, self.question_file))
+            GerenciamentoFormulas.lis_liker = self.liker
             GerenciamentoFormulas.lis_liker = list(GerenciamentoFormulas.lis_liker.items())
         i = GerenciamentoFormulas.lis_liker.pop(GerenciamentoFormulas.lis_liker.index(choice(GerenciamentoFormulas.lis_liker)))
         dic_i[i[0]] = i[1]
         return dic_i
 
     def sequence(self):
-        pass
+        if self.sequence_index+2 <= len(self.liker.items()):
+            self.sequence_index += 1
+        else:
+            self.sequence_index = 0
+        return list(self.liker.items())[self.sequence_index]
+
+
 
 if __name__ == '__main__':
-    meuger = GerenciamentoFormulas()
-    r = meuger.random
-    Inputs().question(**r())
-
+    pass
 
