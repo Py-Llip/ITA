@@ -1,4 +1,3 @@
-from logging import raiseExceptions
 from os import makedirs, getcwd, listdir
 from os.path import join, exists
 
@@ -109,27 +108,30 @@ class Inputs:
         self.text = text
 
     @staticmethod
-    def protegido(func):
+    def _protegido(func):
         def wrapper(self, *args, **kwargs):
-            while True:
+            cont_erro = 0
+            resultado = None
+            while cont_erro < 30:
                 try:
                     resultado = func(self, *args, **kwargs)
                 except Exception:
                     print('\033[31;1mErro!\033[m')
+                    cont_erro +=1
                 else:
                     break
             return resultado
         return wrapper
 
-    @protegido
+    @_protegido
     def str(self):
         return str(input(self.text))
 
-    @protegido
+    @_protegido
     def int(self):
         return int(input(self.text))
 
-    @protegido
+    @_protegido
     def question(self, question:str=None, answer: str=None, **full):
         question = list(full.keys())[0] if question is None else question
         answer = list(full.values())[0] if answer is None else answer

@@ -1,2 +1,2 @@
-dic = {'a': 'b', 'c': 1}
-print(dic)
+text = 'abc'
+print(4//6)
