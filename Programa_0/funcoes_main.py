@@ -1,4 +1,4 @@
-from os import makedirs, getcwd, listdir
+from os import makedirs, getcwd, listdir, walk
 from os.path import join, exists
 
 class VerificacaoPasta:
@@ -68,6 +68,15 @@ class GerenciamentoArquivo:
     def __init__(self, path: str, file: str=None):
         self.path = path
         self.file = file
+
+    def file_show(self, path: str=None):
+        path = self.path if path is None else path
+        arqs = []
+        for dp, dn, fn in walk(path):
+            if fn:
+                if fn[0].endswith('.txt'):
+                    arqs.append(fn)
+        return arqs
 
     def get_arq_initial(self, path: str=''):
         if self.file is None:
@@ -148,13 +157,8 @@ class Inputs:
             print('\033[31;1mResposta errada!\033[m')
             return False
 
-
-
-
-
 if __name__ == '__main__':
-    g = GerenciamentoArquivo(join(getcwd(), 'armazenamento-formulas'), join('formulas', 'formula_01.txt'))
-    g.file_liker(join('argumentos', 'argumento_01.txt'))
+    print(GerenciamentoArquivo(path=getcwd()).file_show())
 
 
 
