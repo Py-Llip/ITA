@@ -1,5 +1,5 @@
 from os import makedirs, getcwd, listdir, walk
-from os.path import join, exists
+from os.path import join, exists, relpath
 
 class VerificacaoPasta:
     def __init__(self, path: str=getcwd()):
@@ -75,7 +75,7 @@ class GerenciamentoArquivo:
         for dp, dn, fn in walk(path):
             if fn:
                 if fn[0].endswith('.txt'):
-                    arqs.append(fn)
+                    arqs.append([relpath(join(dp, fn[0]), start='armazenamento-formulas')])
         return arqs
 
     def get_arq_initial(self, path: str=''):

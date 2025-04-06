@@ -18,10 +18,11 @@ class ManipulacaoFormulas(Interface):
             arq.seek(0)
         FormatacaoTexto.tabela(*FormatacaoTexto(self.path, file).show((-4, None)), title='Adicionado neste arquivo')
 
-    def dlt(self, low: int):
-        with open(os.path.join(self.path, self.file), 'r+', encoding='utf-8') as arq:
+    def dlt(self, low: int, file: str=None):
+        file = self.file if file is None else file
+        with open(os.path.join(self.path, file), 'r+', encoding='utf-8') as arq:
             conteudo = arq.readlines()
-            print(f'\033[31m{FormatacaoTexto(self.path, self.file).formatacao(text=conteudo[low - 1], title='Conteúdo apagado:')}')
+            print(f'\033[31m{FormatacaoTexto(self.path, self.file).formatacao(text=conteudo[low - 1], title='Conteúdo apagado:')}\033[m')
             del conteudo[low-1]
             arq.seek(0)
             arq.truncate()
