@@ -17,9 +17,6 @@ print(l1)
 print(f'{'Olá, Seja muito bem-vindo!':^150}')
 print(l1)
 
-#Arquivo que deseja usar
-s = frml.GerenciamentoFormulas(file='formula_01.txt') #fc.Inputs(f'{'Nome do arquivo que quer acessar: ':>92}').str()
-
 #Funções das Opções
 # Sistema de respostas
 def answer():
@@ -29,26 +26,44 @@ def answer():
 
 # Sistema de escrever num arquivo
 def add_dlt(tp: str=False):
-    c = frml.ManipulacaoFormulas()
-    arqs = [[e+1, i[0]] for e, i in enumerate(fc.GerenciamentoArquivo(s.path, s.file).file_show())]
-    fc.FormatacaoTexto.tabela(*arqs, title='OPÇÕES', subtitles=('N°', 'ARQUIVOS'))
-    na = fc.Inputs('Número do arquivo: ').int()
     if tp:
-        partial(c.add, file=arqs[na-1][1], text=fc.Inputs('Texto para adicionar: ').str())()
+        partial(r.add, file=s.file, text=fc.Inputs('Texto para adicionar: ').str())()
     else:
-        partial(c.dlt, file=arqs[na-1][1], low=fc.Inputs('Linha para apagar: ').int())()
+        partial(r.dlt, file=s.file, low=fc.Inputs('Linha para apagar: ').int())()
 
-#Questões
-menu = False
-while not menu:
-    fc.FormatacaoTexto.tabela((1, 'Responder'), (2, 'Gabarito'), (3, 'Adicionar'), (4, 'Apagar'),(5, 'Mostrar'), (6, 'Finalizar'), title='MENU', subtitles=('Opções', 'Descrição'))
-    op(**{'1': answer,
-          '2': partial(fc.FormatacaoTexto.tabela,*fc.GerenciamentoArquivo(s.path, s.file).file_liker(s.question_file).items(), title='GABARITO', subtitles=('Questão', 'Resposta')),
-          '3': partial(add_dlt, tp=True),
-          '4': add_dlt,
-          '5': frml.ManipulacaoFormulas().show()})()
+# Mostrar arquivo
+def file_show():
+    copia = r.file
+    r.file = s.question_file
+    r.show()
+    r.file = copia
 
-    menu = True if fc.Inputs('Deseja continuar? (s/n): ').str()[0].strip().lower() in 'n' else False
+#opções de arquivo
+def file_op():
+    arqs = [[e + 1, i[0]] for e, i in enumerate(fc.GerenciamentoArquivo(s.path, s.file).file_show())]
+    fc.FormatacaoTexto.tabela(*arqs, title='OPÇÕES', subtitles=('N°', 'ARQUIVOS'))
+    np = fc.Inputs('Número do arquivo de argumentos: ').int()
+    nr = fc.Inputs('Número do arquivo de fórmulas: ').int()
+    return arqs[np-1][1], arqs[nr-1][1]
+
+#Arquivo que deseja usar
+while True:
+    s = frml.GerenciamentoFormulas()
+    r = frml.ManipulacaoFormulas()
+    s.question_file, s.file = file_op()
+    r.file = s.file
+
+    #Questões
+    menu = False
+    while not menu:
+        fc.FormatacaoTexto.tabela((1, 'Responder'), (2, 'Gabarito'), (3, 'Adicionar'), (4, 'Apagar'),(5, 'Questões'), (6, 'Finalizar'), title='MENU', subtitles=('Opções', 'Descrição'))
+        op(**{'1': answer,
+              '2': partial(fc.FormatacaoTexto.tabela,*fc.GerenciamentoArquivo(s.path, s.file).file_liker(s.question_file).items(), title='GABARITO', subtitles=('Questão', 'Resposta')),
+              '3': partial(add_dlt, tp=True),
+              '4': add_dlt,
+              '5': file_show,
+              '6': exit})()
+        menu = True if fc.Inputs('Deseja continuar? (s/n): ').str()[0].strip().lower() in 'n' else False
 
 
 

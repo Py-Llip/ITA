@@ -37,7 +37,6 @@ class ManipulacaoFormulas(Interface):
 
 
 class GerenciamentoFormulas(Interface):
-
     def __init__(self, question_file: str=None, path: str=os.path.join(os.getcwd(), 'armazenamento-formulas'), file: str=None):
         super().__init__(path, file)
         self.question_file = GerenciamentoArquivo(self.path, question_file).get_arq_initial('argumentos')
