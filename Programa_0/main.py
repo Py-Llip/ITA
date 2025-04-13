@@ -19,13 +19,18 @@ print(l1)
 
 #Funções das Opções
 # Sistema de respostas
-def answer():
+def answer(sequence: bool=False):
     resp = None
     while not resp:
-        resp = fc.Inputs('Responda: ').question(**s.random())
+        print(l('¨', 20))
+        if not sequence:
+            resp = fc.Inputs('Responda: ').question(**s.random())
+        else:
+            resp = fc.Inputs('Responda: ').question(**s.sequence())
 
 # Sistema de escrever num arquivo
 def add_dlt(tp: str=False):
+    print(l('¨', 20))
     if tp:
         partial(r.add, file=s.file, text=fc.Inputs('Texto para adicionar: ').str())()
     else:
@@ -47,17 +52,19 @@ def file_op():
     return arqs[np-1][1], arqs[nr-1][1]
 
 #Arquivo que deseja usar
+s = frml.GerenciamentoFormulas()
+r = frml.ManipulacaoFormulas()
 while True:
-    s = frml.GerenciamentoFormulas()
-    r = frml.ManipulacaoFormulas()
     s.question_file, s.file = file_op()
     r.file = s.file
 
     #Questões
     menu = False
     while not menu:
+        print(l(size=100))
         fc.FormatacaoTexto.tabela((1, 'Responder'), (2, 'Gabarito'), (3, 'Adicionar'), (4, 'Apagar'),(5, 'Questões'), (6, 'Finalizar'), title='MENU', subtitles=('Opções', 'Descrição'))
-        op(**{'1': answer,
+        print(l(size=100))
+        op(**{'1': lambda: answer(sequence=True if fc.Inputs('Em sequência? (s/n): ').str().strip().lower()[0] in 's' else False),
               '2': partial(fc.FormatacaoTexto.tabela,*fc.GerenciamentoArquivo(s.path, s.file).file_liker(s.question_file).items(), title='GABARITO', subtitles=('Questão', 'Resposta')),
               '3': partial(add_dlt, tp=True),
               '4': add_dlt,
