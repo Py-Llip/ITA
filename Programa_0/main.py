@@ -8,7 +8,7 @@ def l(tp: str='-', size: int=1, frmt: tuple=('*', '^', 0)):
 
 #escolher opções
 def op(**option_func):
-    opcao = fc.Inputs('Digite a opção que deseja: ').str()
+    opcao = fc.Inputs('Digite a \033[97;1mOPÇÃO\033[m que deseja: ').str()
     return option_func.get(opcao, None)
 
 #Mensagem de boas-vindas
@@ -47,8 +47,8 @@ def file_show():
 def file_op():
     arqs = [[e + 1, i[0]] for e, i in enumerate(fc.GerenciamentoArquivo(s.path, s.file).file_show())]
     fc.FormatacaoTexto.tabela(*arqs, title='OPÇÕES', subtitles=('N°', 'ARQUIVOS'))
-    np = fc.Inputs('Número do arquivo de argumentos: ').int()
-    nr = fc.Inputs('Número do arquivo de fórmulas: ').int()
+    np = fc.Inputs('Número do arquivo de \033[97;1mARGUMENTOS\033[m: ').int()
+    nr = fc.Inputs('Número do arquivo de \033[97;1mFÓRMULAS\033[m: ').int()
     return arqs[np-1][1], arqs[nr-1][1]
 
 #Arquivo que deseja usar
@@ -64,13 +64,13 @@ while True:
         print(l(size=100))
         fc.FormatacaoTexto.tabela((1, 'Responder'), (2, 'Gabarito'), (3, 'Adicionar'), (4, 'Apagar'),(5, 'Questões'), (6, 'Finalizar'), title='MENU', subtitles=('Opções', 'Descrição'))
         print(l(size=100))
-        op(**{'1': lambda: answer(sequence=True if fc.Inputs('Em sequência? (s/n): ').str().strip().lower()[0] in 's' else False),
+        op(**{'1': lambda: answer(sequence=True if fc.Inputs('Em \033[97;1mSEQUÊNCIA?\033[m (s/n): ').str().strip().lower()[0] in 's' else False),
               '2': partial(fc.FormatacaoTexto.tabela,*fc.GerenciamentoArquivo(s.path, s.file).file_liker(s.question_file).items(), title='GABARITO', subtitles=('Questão', 'Resposta')),
               '3': partial(add_dlt, tp=True),
               '4': add_dlt,
               '5': file_show,
               '6': exit})()
-        menu = True if fc.Inputs('Deseja continuar? (s/n): ').str()[0].strip().lower() in 'n' else False
+        menu = True if fc.Inputs('Deseja \033[97;1mCONTINUAR?\033[m (s/n): ').str()[0].strip().lower() in 'n' else False
 
 
 
