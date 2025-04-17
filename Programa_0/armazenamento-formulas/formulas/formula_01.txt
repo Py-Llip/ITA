@@ -1,4 +1,4 @@
 S = Si + V . T
 (-b +- delta^1/2) / 2 . a
 b^2 - 4 . a . c
-
+Opa
